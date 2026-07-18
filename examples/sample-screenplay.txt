@@ -1,0 +1,32 @@
+《灯塔最后一班》
+
+说明：本剧本为开源项目演示而创作，人物、地点与事件均为虚构。
+
+1、
+场景：旧港灯塔控制室
+时间：夜
+人物：林舟 沈岚
+△窗外风雨渐强，控制台上的警示灯连续闪烁。
+林舟：东侧信标没有回应。
+沈岚检查备用电源，把一本值班日志推到林舟面前。
+沈岚：最后一次人工记录是在二十分钟前。
+
+2、
+场景：海湾栈桥
+时间：清晨
+人物：林舟 沈岚 阿青
+△雨停了，阿青提着防水工具箱跑上栈桥。
+阿青：我在仓库找到一台旧发射器，但电池只能维持十分钟。
+林舟望向雾中的浮标，决定先恢复近岸信号。
+
+INT. WEATHER STATION - MORNING
+
+The radio prints a short weather bulletin.
+MAYA circles a safe route on the harbor map.
+MAYA: The fog will lift before noon.
+
+EXT. HARBOR SQUARE - DAY
+
+The repaired beacon flashes across the water.
+Lin Zhou closes the logbook. Shen Lan records the test time.
+No crowds are present, and the square remains quiet.

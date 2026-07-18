@@ -1,0 +1,62 @@
+name: 缺陷报告
+description: 报告可以稳定复现的程序错误；安全漏洞请改按 SECURITY.md 私下报告。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请勿上传未获授权的剧本、API 密钥、`.env` 文件，或含敏感内容的日志与模型产物。
+        安全漏洞和已经发生的敏感信息泄露请不要创建公开 Issue，请按仓库根目录的 `SECURITY.md` 私下联系维护者。
+
+  - type: checkboxes
+    id: safety_confirmation
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已移除剧本正文、API 密钥、个人信息和其他敏感内容。
+          required: true
+        - label: 这不是安全漏洞或敏感信息泄露报告。
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 请说明实际行为与预期行为，使用虚构或最小化的输入示例。
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 最小复现步骤
+      placeholder: |
+        1. 运行……
+        2. 输入虚构样例……
+        3. 观察到……
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 项目版本
+      placeholder: 例如 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 操作系统、Python 与 uv 版本。
+      placeholder: 例如 Windows 11、Python 3.13、uv 0.10
+    validations:
+      required: true
+
+  - type: textarea
+    id: sanitized_logs
+    attributes:
+      label: 已脱敏日志
+      description: 可选。只粘贴与问题直接相关且完成脱敏的最短片段。
+      render: shell
