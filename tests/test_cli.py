@@ -1,10 +1,13 @@
 import json
+from io import StringIO
 from pathlib import Path
 
 from pydantic import SecretStr
+from rich.console import Console
 from typer.testing import CliRunner
 
 from movie_breakdown import cli
+from movie_breakdown.cli_render import print_json
 from movie_breakdown.config import AppSettings
 from tests.test_pipeline import _FakeAnalyzer
 
@@ -48,6 +51,21 @@ def test_help_and_version_are_available() -> None:
     assert "analyze" in help_result.stdout
     assert version_result.exit_code == 0
     assert "1.0.0" in version_result.stdout
+
+
+def test_json_output_remains_machine_readable_when_color_is_forced() -> None:
+    output = StringIO()
+    forced_color_console = Console(
+        file=output,
+        force_terminal=True,
+        color_system="standard",
+    )
+
+    print_json({"ok": True}, forced_color_console)
+
+    rendered = output.getvalue()
+    assert "\x1b" not in rendered
+    assert json.loads(rendered) == {"ok": True}
 
 
 def test_analyze_status_validate_export_and_resume_json(tmp_path: Path, monkeypatch) -> None:

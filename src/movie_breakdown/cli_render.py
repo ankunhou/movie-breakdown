@@ -31,7 +31,10 @@ def print_json(value: BaseModel | dict[str, Any] | list[Any], console: Console) 
     """
     if isinstance(value, BaseModel):
         value = value.model_dump(mode="json", exclude_computed_fields=True)
-    console.print_json(json.dumps(value, ensure_ascii=False, sort_keys=True))
+    console.print_json(
+        json.dumps(value, ensure_ascii=False, sort_keys=True),
+        highlight=False,
+    )
 
 
 def render_status(

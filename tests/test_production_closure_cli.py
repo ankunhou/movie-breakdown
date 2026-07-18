@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+from rich.text import Text
 from typer.testing import CliRunner
 
 from movie_breakdown import cli, cli_production, cli_production_closure
@@ -95,10 +96,15 @@ def test_production_closure_commands_are_registered_in_help() -> None:
     assert result.exit_code == ExitCode.SUCCESS
     for command in ("plan", "review", "correct", "finalize"):
         assert command in result.stdout
-    finalize_help = runner.invoke(cli.app, ["production", "finalize", "--help"])
+    finalize_help = runner.invoke(
+        cli.app,
+        ["production", "finalize", "--help"],
+        env={"FORCE_COLOR": "1"},
+    )
     assert finalize_help.exit_code == ExitCode.SUCCESS
-    assert "--profile" in finalize_help.stdout
-    assert "evaluation" in finalize_help.stdout
+    plain_help = Text.from_ansi(finalize_help.stdout).plain
+    assert "--profile" in plain_help
+    assert "evaluation" in plain_help
 
 
 def test_plan_blocked_is_rendered_before_exit_code_two(tmp_path: Path, monkeypatch) -> None:
