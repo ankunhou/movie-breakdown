@@ -1,0 +1,76 @@
+name: 发布到 PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pypi-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 构建发行包
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出发布标签
+        uses: actions/checkout@v7
+
+      - name: 安装 Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: 安装 uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+      - name: 校验标签与包版本
+        shell: bash
+        run: |
+          package_version="$(uv version --short)"
+          tag_version="${GITHUB_REF_NAME#v}"
+          test "${tag_version}" = "${package_version}"
+
+      - name: 校验锁文件
+        run: uv lock --check
+
+      - name: 构建源码包与 wheel
+        run: uv build --no-sources --clear
+
+      - name: 验证 wheel 安装与 CLI
+        run: uv run --isolated --no-project --with dist/*.whl movie-breakdown --version
+
+      - name: 验证源码包安装与 CLI
+        run: uv run --isolated --no-project --with dist/*.tar.gz movie-breakdown --version
+
+      - name: 保存待发布产物
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-distributions
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: 使用 Trusted Publishing 发布
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      actions: read
+      id-token: write
+
+    steps:
+      - name: 下载待发布产物
+        uses: actions/download-artifact@v8
+        with:
+          name: python-distributions
+          path: dist/
+
+      - name: 发布到 PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

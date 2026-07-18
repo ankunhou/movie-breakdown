@@ -1,0 +1,70 @@
+name: 手动发布到 TestPyPI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testpypi-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 构建测试发行包
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      - name: 安装 Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: 安装 uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+      - name: 校验锁文件
+        run: uv lock --check
+
+      - name: 构建源码包与 wheel
+        run: uv build --no-sources --clear
+
+      - name: 验证 wheel 安装与 CLI
+        run: uv run --isolated --no-project --with dist/*.whl movie-breakdown --version
+
+      - name: 验证源码包安装与 CLI
+        run: uv run --isolated --no-project --with dist/*.tar.gz movie-breakdown --version
+
+      - name: 保存待发布产物
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-python-distributions
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: 使用 Trusted Publishing 发布到 TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+    permissions:
+      actions: read
+      id-token: write
+
+    steps:
+      - name: 下载待发布产物
+        uses: actions/download-artifact@v8
+        with:
+          name: test-python-distributions
+          path: dist/
+
+      - name: 发布到 TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
