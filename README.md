@@ -627,9 +627,9 @@ uv run --no-cache pytest -q
 
 当前基线：
 
-- 317 项测试通过；
+- 319 项离线测试通过，并在 Python 3.12 与 3.13 上验证；
 - 1 项真实 DeepSeek 在线契约测试默认跳过；
-- pytest-cov 总覆盖率 88%；
+- pytest-cov 总覆盖率 88.10%，CI 门禁为 85%；
 - Ruff 同时检查 import、代码质量和 Google 风格 docstring；
 - 自动化约束保证 `src` 下单个 Python 文件不超过 300 行。
 
