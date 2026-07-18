@@ -12,6 +12,7 @@ authors = [
 maintainers = [
     { name = "Andy (ankunhou)", email = "houankun@hotmail.com" },
 ]
+
 keywords = [
     "screenplay",
     "narrative-analysis",
@@ -42,6 +43,13 @@ dependencies = [
     "pypdf>=5,<7",
     "typer>=0.16,<1",
 ]
+
+[project.urls]
+Homepage = "https://github.com/ankunhou/movie-breakdown"
+Repository = "https://github.com/ankunhou/movie-breakdown.git"
+Issues = "https://github.com/ankunhou/movie-breakdown/issues"
+Documentation = "https://github.com/ankunhou/movie-breakdown/tree/main/docs"
+Changelog = "https://github.com/ankunhou/movie-breakdown/blob/main/CHANGELOG.md"
 
 [project.scripts]
 movie-breakdown = "movie_breakdown.cli:main"

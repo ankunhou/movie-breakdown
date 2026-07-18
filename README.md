@@ -122,6 +122,8 @@ flowchart TD
 当前版本以源码安装为准。克隆或下载仓库后，在项目根目录执行：
 
 ```powershell
+git clone https://github.com/ankunhou/movie-breakdown.git
+cd movie-breakdown
 uv sync --locked
 uv run movie-breakdown --version
 ```
